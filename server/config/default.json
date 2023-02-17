@@ -1,0 +1,5 @@
+{
+    "serverPort": 5000,
+    "secretKey": "backend-app",
+    "DB_URL": "mongodb+srv://root:root@cluster0.olovaji.mongodb.net/blog?retryWrites=true&w=majority"
+}
