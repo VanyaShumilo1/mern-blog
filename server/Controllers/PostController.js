@@ -1,4 +1,5 @@
 import PostModel from '../Models/Post.js'
+import CommentModel from "../Models/Comment.js";
 
 export const getLastTags = async (req, res) => {
     try {
@@ -109,6 +110,44 @@ export const update = async (req, res) => {
         console.log(err)
         res.status(500).json({
             message: "Can't update this post"
+        })
+    }
+}
+
+export const addComment = async (req, res) => {
+    try {
+        const postId = req.params.id
+
+        console.log()
+
+        const comment = await CommentModel.create({
+            content: req.body.content,
+            user: req.userId,
+            post: postId,
+            forPost: postId,
+        })
+
+        res.status(200).json(comment)
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message: err
+        })
+    }
+}
+
+export const getComment = async (req, res) => {
+    try {
+        const id = req.params.id
+        const comment = await CommentModel.find({post: {_id: id}}).populate('post').populate('user').exec()
+
+        res.status(200).json(comment)
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            message: err
         })
     }
 }

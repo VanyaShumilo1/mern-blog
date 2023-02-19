@@ -16,6 +16,9 @@ export const Header = () => {
         }
     };
 
+    const userData = useSelector(state => state.auth.data)
+
+
     return (
         <div className={styles.root}>
             <Container maxWidth="lg">
@@ -26,6 +29,7 @@ export const Header = () => {
                     <div className={styles.buttons}>
                         {isAuth ? (
                             <>
+                                <div>{userData.fullName}</div>
                                 <Link to="/add-post">
                                     <Button variant="contained">Add post</Button>
                                 </Link>

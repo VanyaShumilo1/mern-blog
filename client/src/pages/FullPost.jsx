@@ -12,6 +12,16 @@ export const FullPost = () => {
     const {id} = useParams()
     const [post, setPost] = useState({})
     const [isLoading, setIsLoading] = useState(true)
+    const [isCommentsLoading, setIsCommentsLoading] = useState(true)
+
+    const [comments, setComments] = useState([])
+    const [test, setTest] = useState(0)
+    const getComments = async () => {
+        setIsCommentsLoading(false)
+        const com = await axios.get(`/comments/${id}`)
+        setComments(com.data)
+        setIsCommentsLoading(false)
+    }
 
     useEffect(() => {
         axios.get(`/posts/${id}`).then(res => {
@@ -20,7 +30,11 @@ export const FullPost = () => {
         }).catch(err => {
             alert(err)
         })
-    }, [])
+
+        getComments()
+
+    }, [test])
+
 
     if(isLoading) {
         return <Post isLoading={isLoading} isFullPost/>
@@ -43,25 +57,10 @@ export const FullPost = () => {
 
             </Post>
             <CommentsBlock
-                items={[
-                    {
-                        user: {
-                            fullName: "Вася Пупкин",
-                            avatarUrl: "https://mui.com/static/images/avatar/1.jpg",
-                        },
-                        text: "Это тестовый комментарий 555555",
-                    },
-                    {
-                        user: {
-                            fullName: "Иван Иванов",
-                            avatarUrl: "https://mui.com/static/images/avatar/2.jpg",
-                        },
-                        text: "When displaying three lines or more, the avatar is not aligned at the top. You should set the prop to align the avatar at the top",
-                    },
-                ]}
-                isLoading={false}
+                items={comments}
+                isLoading={isCommentsLoading}
             >
-                <Index/>
+                <Index postID={id} setTest={setTest} test={test}/>
             </CommentsBlock>
         </>
     );
